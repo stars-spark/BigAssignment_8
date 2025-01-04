@@ -66,37 +66,37 @@ struct asset_node *read_from_keyboard(void) {
 		return NULL;
 	}
 	printf("请输入资产编号：");
-	if (scanf("%hu", &((*assetnode).data.asset_id) != 1)) {
+	if (scanf("%hu", &((*assetnode).data.asset_id)) != 1) {
 		printf("输入错误\n");
 		free(assetnode);
 		return NULL;
 	}
 	printf("请输入资产名称：");
-	if (scanf("%s", &((*assetnode).data.asset_name) != 1)) {
+	if (scanf("%s", &((*assetnode).data.asset_name)) != 1) {
 		printf("输入错误\n");
 		free(assetnode);
 		return NULL;
 	}
-	printf("请输入资产类别：");
-	if (scanf("%d", &((*assetnode).data.asset_type) != 1)) {
+	printf("请输入资产类别（家具=1，教学设备=2，科研设备=3，办公设备=4，软件资产=5，其他=6）：");
+    if (scanf("%d", &((*assetnode).data.asset_type)) != 1) {
 		printf("输入错误\n");
 		free(assetnode);
 		return NULL;
 	}
 	printf("请输入购置价格：");
-	if (scanf("%f", &((*assetnode).data.price) != 1)) {
+    if (scanf("%f", &((*assetnode).data.price)) != 1) {
 		printf("输入错误\n");
 		free(assetnode);
 		return NULL;
 	}
 	printf("请输入领用人名称：");
-	if (scanf("%s", &((*assetnode).data.recipient_name) != 1)) {
+    if (scanf("%s", (*assetnode).data.recipient_name) != 1) {
 		printf("输入错误\n");
 		free(assetnode);
 		return NULL;
 	}
 	printf("请输入领用人电话：");
-	if (scanf("%d", &((*assetnode).data.phone_number) != 1)) {
+	if (scanf("%d", &((*assetnode).data.phone_number)) != 1) {
 		printf("输入错误\n");
 		free(assetnode);
 		return NULL;
@@ -118,6 +118,8 @@ struct asset_node* add_asset(struct asset_node* head) {
 	new_asset->next = head; //新节点的next指向head所指的节点
 	return new_asset; //返回新节点地址，外部可以用头指针接收
 }
+
+
 
 /*void output_to_screen(void) {
     for (int i = 0; i < asset_count; i++) {

@@ -136,6 +136,9 @@
     <ClInclude Include="func.h" />
     <ClInclude Include="menu.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\Desktop\asset_data.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
