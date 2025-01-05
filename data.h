@@ -3,18 +3,13 @@
 #define DATA_H
 
 typedef struct asset {
-	unsigned short asset_id; //资产编号
+	unsigned int asset_id; //资产编号
 	char asset_name[50]; //资产名称
-	enum {  //资产类别枚举
-		家具 = 1,
-		教学设备 = 2,
-		科研设备 = 3,
-		办公设备 = 4,
-		软件资产 = 5,
-		其他 = 6
-	} asset_type;
+	int asset_type; //资产类别（家具=1，教学设备=2，科研设备=3，办公设备=4，软件资产=5，其他=6）
+	char school[99]; //所属学院
+	int purchase_year; //购置年份
 	float price; //购置价格
-	char recipient_name[4]; //领用人名称
+	char recipient_name[20]; //领用人名称
 	unsigned int phone_number; //领用人电话
 } Asset;
 
@@ -25,7 +20,7 @@ typedef struct asset_node {
 	struct asset_node* next;
 } Node;
 
-Node* head; //头指针
+//Node* head; //头指针
 
 
 

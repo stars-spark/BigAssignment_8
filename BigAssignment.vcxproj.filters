@@ -37,7 +37,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\..\Desktop\asset_data.txt">
+    <Text Include="asset_data.txt">
       <Filter>资源文件</Filter>
     </Text>
   </ItemGroup>

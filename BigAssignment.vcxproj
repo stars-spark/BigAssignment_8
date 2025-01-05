@@ -137,7 +137,7 @@
     <ClInclude Include="menu.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\..\Desktop\asset_data.txt" />
+    <Text Include="asset_data.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
