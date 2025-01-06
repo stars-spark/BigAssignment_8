@@ -1,11 +1,12 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS 1
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "menu.h"
 #include "func.h"
 #include "data.h"
 
-int option, son_option, grandson_option; // 全局变量
+extern int option, son_option, grandson_option; // 全局变量
 
 int main() {
 	struct asset_node* asset_list = (struct asset_node*)malloc(sizeof(struct asset_node));
@@ -25,6 +26,7 @@ int main() {
 	asset_list->next = NULL;
 
 menu: //标签
+
 	printf("***********************************\n");
 	printf("*     简易资产信息管理系统        *\n");
 	printf("*作者：李家乐  学号：2422040318   *\n");
@@ -54,16 +56,8 @@ menu: //标签
 	switch (option) {
 		//*		1.输入 资产信息          *
 	case 1:
-		printf("***********************************\n");
-		printf("*          输 入 子 菜 单         *\n");
-		printf("*           1.从键盘录入          *\n");
-		printf("*           2.从文件导入          *\n");
-		printf("***********************************\n");
-		printf("请输入功能选项：");
-		if (scanf("%d", &son_option) != 1) {
-			printf("输入错误，请输入一个有效的数字。\n");
-			return 1; // 错误
-		}
+		son_option = sub_menu_1(son_option);
+		//printf("son_option = %d\n", son_option);
 		if (son_option == 1) {
 			printf("\n");
 			for (;;) {
@@ -77,11 +71,13 @@ menu: //标签
 				}
 			}
 			//input_from_keyboard();
+			remove_invalid_nodes(&asset_list);
 			goto menu; //回到主菜单
 
 		}
 		else if (son_option == 2) {
 			asset_list = read_from_file(asset_list);
+			remove_invalid_nodes(&asset_list);
 			if (asset_list == NULL) {
 				printf("文件读取失败。\n");
 			}
@@ -93,16 +89,7 @@ menu: //标签
 		break;
 		//*		2.修改 资产信息          *
 	case 2:
-		printf("***********************************\n");
-		printf("*          修 改 子 菜 单         *\n");
-		printf("*           1.添加                *\n");
-		printf("*           2.删除                *\n");
-		printf("***********************************\n");
-		printf("请输入功能选项：");
-		if (scanf("%d", &son_option) != 1) {
-			printf("输入错误，请输入一个有效的数字。\n");
-			return 1; // 错误
-		}
+		son_option = sub_menu_2(son_option);
 		switch (son_option) {
 		case 1:
 			for (;;) {
@@ -150,20 +137,22 @@ menu: //标签
 				goto menu;
 				break;
 			}
+		case 3:
+			printf("请输入资产编号：");
+			unsigned int assetid;
+			if (scanf("%u", &assetid) != 1) {
+				printf("输入错误，请输入一个有效的数字。\n");
+				goto menu;
+				return 1; // 错误
+			}
+			modify_asset_data(asset_list, assetid);
+			goto menu;
 			break;
+
 		}
 		//*		3.计算 资产信息          *
 	case 3:
-		printf("***********************************\n");
-		printf("*         计 算 子 菜 单          *\n");
-		printf("*         1.计算资产总价值        *\n");
-		printf("*         2.计算资产平均价值      *\n");
-		printf("***********************************\n");
-		printf("请输入功能选项：");
-		if (scanf("%d", &son_option) != 1) {
-			printf("输入错误，请输入一个有效的数字。\n");
-			return 1; // 错误
-		}
+		son_option = sub_menu_3(son_option);
 		switch (son_option) {
 		case 1:
 			calculate_total_price(asset_list);
@@ -177,45 +166,29 @@ menu: //标签
 		break;
 		//*		4.排序 资产信息          *
 	case 4:
-		printf("***********************************\n");
-		printf("*         排 序 子 菜 单          *\n");
-		printf("*         1.按购置年份排序        *\n");
-		printf("*         2.按购置价格升序排列    *\n");
-		printf("*         3.按购置价格降序排列    *\n");
-		printf("***********************************\n");
-		printf("请输入功能选项：");
-		if (scanf("%d", &son_option) != 1) {
-			printf("输入错误，请输入一个有效的数字。\n");
-			return 1; // 错误
-		}
+		son_option = sub_menu_4(son_option);
 		
 		switch (son_option) {
 		case 1:
 			sort_by_purchase_year(asset_list);
+			print_asset_screen(asset_list);
 			goto menu;
 			break;
 		case 2:
 			sort_by_price_ascend(asset_list);
+			print_asset_screen(asset_list);
 			goto menu;
 			break;
 		case 3:
 			sort_by_price_descend(asset_list);
+			print_asset_screen(asset_list);
 			goto menu;
 			break;
 		}
 		break;
 		//*		5.查询 资产信息          *
 	case 5:
-		printf("***********************************\n");
-		printf("*         查 询 子 菜 单          *\n");
-		printf("*         1.按资产编号查询        *\n");
-		printf("*         2.按资产名称查询        *\n");
-		printf("***********************************\n");
-		printf("请输入子选项：");
-		if (scanf("%d", &son_option) != 1) {
-			printf("输入错误，请输入一个有效的数字。\n");
-			return 1; // 错误
-		}
+		son_option = sub_menu_5(son_option);
 		switch (son_option) {
 		case 1:
 			printf("请输入资产编号：");
@@ -240,17 +213,9 @@ menu: //标签
 		}
 
 		break;
-	case 6:   //无子菜单，直接输出结果
-		printf("***********************************\n");
-		printf("*         统 计 子 菜 单          *\n");
-		printf("*         1.按学院统计            *\n");
-		printf("*         2.按购买年份统计        *\n");
-		printf("***********************************\n");
-		printf("请输入子选项：");
-		if (scanf("%d", &son_option) != 1) {
-			printf("输入错误，请输入一个有效的数字。\n");
-			return 1; // 错误
-		}
+	case 6:   
+		son_option = sub_menu_6(son_option);
+		//printf("son_option = %d\n", son_option);
 		switch (son_option) {
 		case 1:
 			statistic_by_school(asset_list);
@@ -258,22 +223,18 @@ menu: //标签
 			break;
 		case 2:
 			statistic_by_purchase_year(asset_list);
+
 			goto menu;
 			break;
+		case 3:
+			statistic_year_percentage(asset_list);
+			//print_asset_screen(asset_list);
+			goto menu;
 		}
 
 		break;
 	case 7:
-		printf("***********************************\n");
-		printf("*         输 出 子 菜 单          *\n");
-		printf("*         1.输出到屏幕            *\n");
-		printf("*         2.输出到文件            *\n");
-		printf("***********************************\n");
-		printf("请输入功能选项：");
-		if (scanf("%d", &son_option) != 1) {
-			printf("输入错误，请输入一个有效的数字。\n");
-			return 1; // 错误
-		}
+		son_option = sub_menu_7(son_option);
 		switch (son_option) {
 		case 1:
 			print_asset_screen(asset_list);
